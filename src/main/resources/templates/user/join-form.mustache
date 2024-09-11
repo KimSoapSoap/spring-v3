@@ -8,9 +8,10 @@
     <div class="card">
         <div class="card-header"><b>회원가입을 해주세요</b></div>
         <div class="card-body">
-            <form action="/join" method="post" enctype="application/x-www-form-urlencoded">
+            <form action="/join" method="post" enctype="application/x-www-form-urlencoded" onsubmit="return valid()">
                 <div class="mb-3">
-                    <input type="text" class="form-control" placeholder="Enter username" name="username" value="haha">
+                    <input type="text" class="form-control" placeholder="Enter username" name="username" id="username" value="haha">
+                    <button type="button" onclick="sameCheck()" class="btn btn-outline-primary">중복체크</button>
                 </div>
                 <div class="mb-3">
                     <input type="password" class="form-control" placeholder="Enter password" name="password"
@@ -25,5 +26,47 @@
         </div>
     </div>
 </div>
+
+<script>
+    // 1. boolean 타입은 변수 이름을 is를 붙여서 만든다. (컨벤션)
+    let isSameUsername = true;
+
+    async function sameCheck() {
+        // 1. username 가져오기
+        // 가능하면 id를 줘서 깔끔하게 #id 로 찾는다. input[name="a"] 이런식으로 찾지 말자.
+        let username = $("#username").val();
+
+        // 2. fetch로 통신하기(get, url 모름)
+        let response = await fetch(`/user/samecheck?username=${username}`);
+        let responseBody = await response.json();
+
+
+        // 3. 중복됐으면 -> isSameUsername = true  -> valid()가 false로 리턴돼서 form태그의 액션x
+
+        // 4. 중복 안 됐으면 -> isSameUsername = false; -> valid()가 true로 리턴돼서 form태그 액션o
+        //    하나 더 해줄 게 username input을 readOnly
+
+        if(responseBody.body) {
+            isSameUsername = true;
+            alert("중복된 유저네임이에요.");
+        } else {
+            isSameUsername = false;
+            alert("사용 가능한 유저네임입니다.");
+            $("#username").attr("readonly", true);
+        }
+    }
+
+
+
+    function valid() {
+        if(isSameUsername) {
+            alert("중복체크가 필요합니다.")
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+</script>
 
 {{> layout/footer}}
