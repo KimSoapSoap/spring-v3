@@ -12,7 +12,7 @@
 
 
 
-    {{#models}}
+    {{#model.content}}
 
         <div class="card mb-3">
             <div class="card-body">
@@ -21,6 +21,12 @@
             </div>
         </div>
 
-    {{/models}}
+    {{/model.content}}
+
+    <ul class="pagination d-flex justify-content-center">
+        <li class="page-item"><a class="page-link" href="?page={{prev}}">Previous</a></li>
+        <li class="page-item"><a class="page-link" href="?page={{next}}">Next</a></li>
+    </ul>
+
 </div>
 {{>layout/footer}}

@@ -1,5 +1,6 @@
 package green.mtcoding.springv3.board;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import green.mtcoding.springv3.reply.Reply;
 import green.mtcoding.springv3.user.User;
@@ -41,12 +42,14 @@ public class Board {
     private Timestamp createdAt;
 
     // fk
+    //@JsonIgnore //mFindAll_test() 테스트 하려고 임시로 걸어둔 것
     //@JsonIgnoreProperties({"password"})  // 게시판 작성자 user정보의 password를 제외. 알아만 두자
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
     // reply
 
+    //@JsonIgnore  //mFindAll_test() 테스트 하려고 임시로 걸어둔 것
     //@JsonIgnoreProperties({"board", "createdAt"})  // Json으로 만들 때 얘는 converting 하지 마라는 것
     @OneToMany(mappedBy = "board")
     private List<Reply> replies;

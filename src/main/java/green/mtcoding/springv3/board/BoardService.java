@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import green.mtcoding.springv3.core.error.ex.Exception400;
 import green.mtcoding.springv3.core.error.ex.Exception403;
 import green.mtcoding.springv3.user.User;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -23,7 +24,24 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final BoardQueryRepository boardQueryRepository;
 
-    //이게 동적 쿼리는 아니다. 동적 쿼리는 경우에 따라 다른 쿼리가 나가는 것이다.
+    //페이지 객체 만들어서 페이징 해보기
+    public Page<Board> 게시글목록보기(String title, int page) {
+        Pageable pageable = PageRequest.of(page, 3, Sort.Direction.DESC, "id");
+        //mFindAll에서 order by b.id_desc 지워도 된다. pageable 객체가 해준다
+        if(title == null) {
+            Sort sort = Sort.by(Sort.Direction.DESC, "id");
+            Page<Board> boardList = boardRepository.findAll(pageable);
+            return boardList;
+        } else {
+            Page<Board> boardList = boardRepository.mFindAll(title, pageable);
+            return boardList;
+        }
+
+    }
+
+
+ /*
+  //이게 동적 쿼리는 아니다. 동적 쿼리는 경우에 따라 다른 쿼리가 나가는 것이다.
     public List<Board> 게시글목록보기(String title) {
         if(title == null) {
             Sort sort = Sort.by(Sort.Direction.DESC, "id");
@@ -35,6 +53,7 @@ public class BoardService {
         }
 
     }
+    */
 
 
     @Transactional

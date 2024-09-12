@@ -1,7 +1,6 @@
 {{> layout/header}}
 
 <div class="container p-5">
-
     <!-- 요청을 하면 localhost:8080/join POST로 요청됨
     username=사용자입력값&password=사용자값&email=사용자입력값 -->
 
@@ -41,9 +40,9 @@
         let responseBody = await response.json();
 
 
-        // 3. 중복됐으면 -> isSameUsername = true  -> valid()가 false로 리턴돼서 form태그의 액션x
+        // 3. 중복됐으면  responseBody=true -> isSameUsername = true  -> valid()가 false로 리턴돼서 form태그의 액션x
 
-        // 4. 중복 안 됐으면 -> isSameUsername = false; -> valid()가 true로 리턴돼서 form태그 액션o
+        // 4. 중복 안 됐으면 responseBody=false -> isSameUsername = false; -> valid()가 true로 리턴돼서 form태그 액션o
         //    하나 더 해줄 게 username input을 readOnly
 
         if(responseBody.body) {

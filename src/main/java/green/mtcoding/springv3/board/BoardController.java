@@ -10,8 +10,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 
-
-
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -35,10 +34,20 @@ public class BoardController {
 
     //localhost:8080?title=제목  -> 'title=제목'이 쿼리 스트링이다.
     @GetMapping("/")
-    public String list(@RequestParam(name="title", required = false)String title, HttpServletRequest request) {
-        System.out.println(title);
-        List<Board> boardList = boardService.게시글목록보기(title);
-        request.setAttribute("models", boardList);
+    public String list(
+            @RequestParam(name="title", required = false)String title,
+            @RequestParam(name="page", required = false, defaultValue="0")Integer page,
+                       HttpServletRequest request) {
+        // "/" 로 접속했을 때 기본 0페이지(index)를 보여줘야 한다.
+        //defaultValue를 0으로 주면 쿼리스트링이기 때문에 "0"을 주는데 자동으로 Integer로 컨버팅 해준다.
+
+        //원래 models로 boardList로 전달했는데 이제는 page객체로 전달하기 때문에 이름을 바꿨다. model과 boardPG로 전달
+        //이 page객체 안에 content가 컬렉션이다. 즉 list.mustache에 가서 model.content로 반복 돌리면 된다.
+        Page<Board> boardPG = boardService.게시글목록보기(title, page);
+        request.setAttribute("model", boardPG);
+        request.setAttribute("prev", boardPG.getNumber()-1);
+        request.setAttribute("next", boardPG.getNumber()+1);
+
         return "board/list";
     }
 

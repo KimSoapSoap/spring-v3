@@ -10,6 +10,26 @@ import java.util.List;
 public class BoardResponse {
 
     @Data
+    public static class PageDTO {
+        private Integer number; //현재 페이지
+        private Integer totalPage; // 전체페이지 개수
+        private Integer size; // 한 페이지의 아이템 개수
+        private Integer first;
+        private Integer last;
+        private Integer prev; //현재 페이지 -1
+        private Integer next; //현재 페이지 +1
+        private List<Content> contents = new ArrayList<>(); //일단 빈 객체를 만들어서 초기화 해둔다.
+
+        @Data
+        class Content {
+            private Integer id;
+            private String title;
+        }
+    }
+
+
+
+    @Data
     public static class DetailDTO {
 
         private Integer id;
