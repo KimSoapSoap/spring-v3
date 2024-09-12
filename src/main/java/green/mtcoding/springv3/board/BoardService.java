@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,20 +25,41 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final BoardQueryRepository boardQueryRepository;
 
-    //페이지 객체 만들어서 페이징 해보기
-    public Page<Board> 게시글목록보기(String title, int page) {
+    //DTO로 만들어서 전달.
+    public BoardResponse.PageDTO 게시글목록보기(String title, int page) {
         Pageable pageable = PageRequest.of(page, 3, Sort.Direction.DESC, "id");
+
+
         //mFindAll에서 order by b.id_desc 지워도 된다. pageable 객체가 해준다
         if(title == null) {
             Sort sort = Sort.by(Sort.Direction.DESC, "id");
-            Page<Board> boardList = boardRepository.findAll(pageable);
-            return boardList;
+            Page<Board> boardPG = boardRepository.findAll(pageable);
+            BoardResponse.PageDTO pageDTO = new BoardResponse.PageDTO(boardPG);
+            return pageDTO;
         } else {
-            Page<Board> boardList = boardRepository.mFindAll(title, pageable);
-            return boardList;
+            Page<Board> boardPG = boardRepository.mFindAll(title, pageable);
+            BoardResponse.PageDTO pageDTO = new BoardResponse.PageDTO(boardPG);
+            return pageDTO;
         }
-
     }
+
+
+/*  //DTO 없이 전달한 것.
+    //페이지 객체 만들어서 페이징 해보기
+    public Page<Board> 게시글목록보기(String title, int page) {
+        Pageable pageable = PageRequest.of(page, 3, Sort.Direction.DESC, "id");
+
+        //mFindAll에서 order by b.id_desc 지워도 된다. pageable 객체가 해준다
+        if(title == null) {
+            Sort sort = Sort.by(Sort.Direction.DESC, "id");
+            Page<Board> boardPG = boardRepository.findAll(pageable);
+            return boardPG;
+        } else {
+            Page<Board> boardPG = boardRepository.mFindAll(title, pageable);
+            return boardPG;
+        }
+    }
+*/
 
 
  /*

@@ -43,11 +43,8 @@ public class BoardController {
 
         //원래 models로 boardList로 전달했는데 이제는 page객체로 전달하기 때문에 이름을 바꿨다. model과 boardPG로 전달
         //이 page객체 안에 content가 컬렉션이다. 즉 list.mustache에 가서 model.content로 반복 돌리면 된다.
-        Page<Board> boardPG = boardService.게시글목록보기(title, page);
-        request.setAttribute("model", boardPG);
-        request.setAttribute("prev", boardPG.getNumber()-1);
-        request.setAttribute("next", boardPG.getNumber()+1);
-
+        BoardResponse.PageDTO pageDTO= boardService.게시글목록보기(title, page);
+        request.setAttribute("model", pageDTO);
         return "board/list";
     }
 
