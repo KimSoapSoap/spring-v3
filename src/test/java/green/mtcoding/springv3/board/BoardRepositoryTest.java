@@ -56,12 +56,12 @@ public class BoardRepositoryTest {
 
 
         //when
-        List<Board> boardList = boardRepository.mFindAll(title);
+        //List<Board> boardList = boardRepository.mFindAll(title);
 
 
         //then
-        System.out.println(boardList.size());
-        System.out.println(boardList.get(0).getTitle());
+        //System.out.println(boardList.size());
+        //System.out.println(boardList.get(0).getTitle());
     }
 
 

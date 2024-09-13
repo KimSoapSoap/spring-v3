@@ -11,6 +11,22 @@ import java.util.List;
 
 public class BoardResponse {
 
+
+    @Data
+    public static class BoardListDTO {
+        private Integer id;
+        private String title;
+        private Long count;
+
+        public BoardListDTO(Integer id, String title, Long count) {
+            this.id = id;
+            this.title = title;
+            this.count = count;
+        }
+    }
+
+
+
     @Data
     public static class PageDTO {
         private Integer number; //현재 페이지
@@ -34,12 +50,21 @@ public class BoardResponse {
         private List<Integer> numbers = new ArrayList<>();
         private List<Content> contents = new ArrayList<>(); //일단 빈 객체를 만들어서 초기화 해둔다.
 
+        //keyword는 검색했을 때 결과창 페이지 이동할 때 쿼리스트링으로 사용할 String값
+        //쿼리 스트링은 값이 없으면 null값이 들어가지 않는다.(view에서 에러 터짐) 빈 문자열 ""로 전달해야 된다.
+        //리스트 출력할 때 전체 리스트는 이 keyword를 ""로 전달, 검색한 리스트는 keyword값 존재.
+        //그래서 서비스에서 keyword의 null값을 처리할 것이냐(전체 리스트 조회시 keyword값을 ""로 전달)
+        //아니면 DTO에서 처리할 것이냐(null이면 ""로 처리) 선택하면 된다.
+        //서비스에서 처리하는 게 코드가 깔끔하다.
+        private String keyword;
 
-        public PageDTO(Page<Board> boardPG) {
+        public PageDTO(Page<Board> boardPG, String keyword) {
+            this.keyword = keyword;
             this.number = boardPG.getNumber();
             this.totalPage = boardPG.getTotalPages();
             this.size = boardPG.getSize();
             this.first = boardPG.isFirst();
+            System.out.println("first:" + first);
             this.last = boardPG.isLast();
             if (number == 0) {
                 this.prev = 0;

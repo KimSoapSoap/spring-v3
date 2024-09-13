@@ -34,12 +34,10 @@ public class BoardService {
         if(title == null) {
             Sort sort = Sort.by(Sort.Direction.DESC, "id");
             Page<Board> boardPG = boardRepository.findAll(pageable);
-            BoardResponse.PageDTO pageDTO = new BoardResponse.PageDTO(boardPG);
-            return pageDTO;
+            return new BoardResponse.PageDTO(boardPG, "");
         } else {
             Page<Board> boardPG = boardRepository.mFindAll(title, pageable);
-            BoardResponse.PageDTO pageDTO = new BoardResponse.PageDTO(boardPG);
-            return pageDTO;
+            return new BoardResponse.PageDTO(boardPG, title);
         }
     }
 
